@@ -1,11 +1,15 @@
 import express, { Express } from 'express';
 import dotenv from 'dotenv';
-import v1EnvelopeRouter from './v1/routes/envelopeRoutes';
+import bodyParser from 'body-parser';
+
+import v1EnvelopeRouter from './v1/routes/envelope.route';
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
+
+app.use(bodyParser.json());
 
 app.use('/api/v1/envelopes', v1EnvelopeRouter);
 
