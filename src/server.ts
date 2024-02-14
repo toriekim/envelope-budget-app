@@ -1,10 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
+import { PrismaClient } from '@prisma/client';
 import v1Routes from './v1/routes';
 import * as ErrorHandler from './utils/ErrorHandlers';
 import { HTTP403Error } from './utils/httpErrors';
 import { ErrorWithCode } from './types';
+
+// Init prisma client
+export const prisma = new PrismaClient();
 
 // Init express
 const app: Express = express();
