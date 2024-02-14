@@ -11,12 +11,12 @@ const router: Router = express.Router();
 
 router.get('/', getAllEnvelopes);
 
-router.get('/:envelopeId', getEnvelope);
+router.get('/:id', getEnvelope);
 
 router.post('/', createEnvelope);
 
-router.patch('/:envelopeId', updateEnvelope);
+router.patch('/:id', updateEnvelope);
 
-router.delete('/:envelopeId', deleteEnvelope);
+router.delete('/:id', deleteEnvelope);
 
 export default router;

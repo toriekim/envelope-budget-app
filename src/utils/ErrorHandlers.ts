@@ -9,7 +9,7 @@ export const notFoundError = () => {
 export const clientError = (err: Error, res: Response, next: NextFunction) => {
   if (err instanceof HTTPClientError) {
     const { message, statusCode } = err;
-    res.status(statusCode).send(message);
+    res.status(statusCode).send({ status: 'FAILED', data: { error: message } });
   } else {
     next(err);
   }
@@ -17,8 +17,10 @@ export const clientError = (err: Error, res: Response, next: NextFunction) => {
 
 export const serverError = (err: Error, res: Response, next: NextFunction) => {
   if (process.env.NODE_ENV === 'production') {
-    res.status(500).send('Internal Server Error');
+    res
+      .status(500)
+      .send({ status: 'FAILED', data: { error: 'Internal Server Error' } });
   } else {
-    res.status(500).send(err.stack);
+    res.status(500).send({ status: 'FAILED', data: { error: err.stack } });
   }
 };
