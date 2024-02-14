@@ -1,6 +1,6 @@
 import { Envelope, EnvelopeToInsert, NewEnvelope } from '../types';
 import DB from './db.json';
-import { saveToDatabase } from './utils';
+import { createId, getIdxById, saveToDatabase } from './utils';
 
 export const getAllEnvelopes = () => {
   return DB.envelopes;
@@ -18,14 +18,15 @@ export const createNewEnvelope = (newEnvelope: EnvelopeToInsert) => {
     -1;
   if (isAlreadyAdded) return;
 
-  DB.envelopes.push({ id: DB.envelopes.length, ...newEnvelope });
+  const id = createId(DB);
+  DB.envelopes.push({ id, ...newEnvelope });
   saveToDatabase(DB);
-  return { id: DB.envelopes.length, ...newEnvelope };
+  return { id, ...newEnvelope };
 };
 
 export const updateEnvelope = (id: number, changes: NewEnvelope) => {
-  const updateIdx = DB.envelopes.findIndex((envelope) => envelope.id === id);
-  if (updateIdx === -1) return;
+  const updateIdx = getIdxById(DB, id);
+  if (!updateIdx) return;
 
   const updatedEnvelope: Envelope = {
     ...DB.envelopes[updateIdx],
@@ -38,7 +39,7 @@ export const updateEnvelope = (id: number, changes: NewEnvelope) => {
 };
 
 export const deleteEnvelope = (id: number) => {
-  const deleteIdx = DB.envelopes.findIndex((envelope) => envelope.id === id);
+  const deleteIdx = getIdxById(DB, id);
   if (!deleteIdx) return;
   DB.envelopes.splice(deleteIdx, 1);
   saveToDatabase(DB);
