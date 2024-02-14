@@ -1,3 +1,5 @@
+export type ErrorWithCode = Error & { code?: string };
+
 export interface NewEnvelope {
   title: string;
   budget: number;

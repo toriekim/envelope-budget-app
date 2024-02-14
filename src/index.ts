@@ -1,18 +1,13 @@
-import express, { Express } from 'express';
 import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
-
-import v1EnvelopeRouter from './v1/routes/envelope.route';
-
+import app from './server';
 dotenv.config();
 
-const app: Express = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
+const init = async () => {
+  app.listen(PORT, () => {
+    console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
+  });
+};
 
-app.use('/api/v1/envelopes', v1EnvelopeRouter);
-
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
-});
+init();
