@@ -7,7 +7,6 @@ export const getAllEnvelopes = async (
   next: NextFunction
 ) => {
   try {
-    // mock retrieval of a real DB
     const allEnvelopes = await envelopeService.getAllEnvelopes();
     res.status(200).send({ status: 'OK', data: allEnvelopes });
   } catch (err) {
@@ -30,15 +29,7 @@ export const getEnvelope = async (
       });
     }
 
-    // mock retrieval of a real DB
     const envelope = await envelopeService.getEnvelope(parseInt(id));
-
-    if (!envelope) {
-      return res
-        .status(404)
-        .send({ status: 'FAILED', error: 'Envelope not found' });
-    }
-
     res.status(200).send({ status: 'OK', data: envelope });
   } catch (err) {
     next(err);
@@ -67,15 +58,10 @@ export const createEnvelope = async (
       title,
       budget,
     };
-    const createdEnvelope = envelopeService.createEnvelope(newEnvelope);
+    const createdEnvelope = await envelopeService.createEnvelope(newEnvelope);
     res.status(201).send({ status: 'OK', data: createdEnvelope });
   } catch (err) {
-    // const error = err as Error;
-    // if (error.message === 'Envelope already exists') {
-    //   res.status(401).send(error.message);
-    // } else {
     next(err);
-    // }
   }
 };
 
@@ -97,7 +83,10 @@ export const updateEnvelope = async (
       });
     }
 
-    const updatedEnvelope = envelopeService.updateEnvelope(parseInt(id), body);
+    const updatedEnvelope = await envelopeService.updateEnvelope(
+      parseInt(id),
+      body
+    );
     res.status(200).send({ status: 'OK', data: updatedEnvelope });
   } catch (err) {
     next(err);
@@ -119,8 +108,8 @@ export const deleteEnvelope = async (
       });
     }
 
-    const deleted = envelopeService.deleteEnvelope(parseInt(id));
-    if (deleted) res.status(204).send({ status: 'OK' });
+    const deleted = await envelopeService.deleteEnvelope(parseInt(id));
+    if (deleted.id) res.status(200).send({ status: 'OK', data: deleted });
     else throw new Error();
   } catch (err) {
     next(err);
@@ -136,7 +125,9 @@ export const transferEnvelopeBalance = async (
     const { fromId, toId } = req.params;
     const { amount } = req.body;
 
-    const updatedEnvelopes = envelopeService.transferBalance(
+    console.log('params: ', fromId, toId, amount);
+
+    const updatedEnvelopes = await envelopeService.transferBalance(
       parseInt(fromId),
       parseInt(toId),
       amount

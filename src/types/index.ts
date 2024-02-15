@@ -5,11 +5,9 @@ export interface NewEnvelope {
   budget: number;
 }
 
-export interface EnvelopeToInsert {
-  title: string;
-  budget: number;
-  createdAt: string;
-  updatedAt: string;
+export interface UpdateEnvelope {
+  title?: string;
+  budget?: number;
 }
 
 export interface Envelope {

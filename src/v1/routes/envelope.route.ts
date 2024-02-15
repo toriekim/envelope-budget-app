@@ -5,6 +5,7 @@ import {
   createEnvelope,
   updateEnvelope,
   deleteEnvelope,
+  transferEnvelopeBalance,
 } from '../controllers/envelope.controller';
 
 const router: Router = express.Router();
@@ -18,5 +19,7 @@ router.post('/', createEnvelope);
 router.patch('/:id', updateEnvelope);
 
 router.delete('/:id', deleteEnvelope);
+
+router.post('/:fromId/transfer/:toId', transferEnvelopeBalance);
 
 export default router;
