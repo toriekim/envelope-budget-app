@@ -8,7 +8,7 @@ export const getAllEnvelopes = async (
 ) => {
   try {
     const allEnvelopes = await envelopeService.getAllEnvelopes();
-    res.status(200).send({ status: 'OK', data: allEnvelopes });
+    res.status(200).send({ status: 'success', data: allEnvelopes });
   } catch (err) {
     next(err);
   }
@@ -30,7 +30,7 @@ export const getEnvelope = async (
     }
 
     const envelope = await envelopeService.getEnvelope(parseInt(id));
-    res.status(200).send({ status: 'OK', data: envelope });
+    res.status(200).send({ status: 'success', data: envelope });
   } catch (err) {
     next(err);
   }
@@ -59,7 +59,7 @@ export const createEnvelope = async (
       budget,
     };
     const createdEnvelope = await envelopeService.createEnvelope(newEnvelope);
-    res.status(201).send({ status: 'OK', data: createdEnvelope });
+    res.status(201).send({ status: 'success', data: createdEnvelope });
   } catch (err) {
     next(err);
   }
@@ -87,7 +87,7 @@ export const updateEnvelope = async (
       parseInt(id),
       body
     );
-    res.status(200).send({ status: 'OK', data: updatedEnvelope });
+    res.status(200).send({ status: 'success', data: updatedEnvelope });
   } catch (err) {
     next(err);
   }
@@ -109,8 +109,45 @@ export const deleteEnvelope = async (
     }
 
     const deleted = await envelopeService.deleteEnvelope(parseInt(id));
-    if (deleted.id) res.status(200).send({ status: 'OK', data: deleted });
+    if (deleted.id) res.status(200).send({ status: 'success', data: deleted });
     else throw new Error();
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getEnvelopeTransactions = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const transactions = await envelopeService.getEnvelopeTransactions(
+      parseInt(id)
+    );
+    res.status(200).send({ status: 'success', data: transactions });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const addEnvelopeTransaction = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const { description, amount } = req.body;
+
+    const result = await envelopeService.addEnvelopeTransaction(
+      parseInt(id),
+      description,
+      parseInt(amount)
+    );
+
+    res.status(201).send({ status: 'success', data: result });
   } catch (err) {
     next(err);
   }
@@ -125,14 +162,12 @@ export const transferEnvelopeBalance = async (
     const { fromId, toId } = req.params;
     const { amount } = req.body;
 
-    console.log('params: ', fromId, toId, amount);
-
     const updatedEnvelopes = await envelopeService.transferBalance(
       parseInt(fromId),
       parseInt(toId),
       amount
     );
-    res.status(201).send({ status: 'OK', data: updatedEnvelopes });
+    res.status(201).send({ status: 'success', data: updatedEnvelopes });
   } catch (err) {
     next(err);
   }

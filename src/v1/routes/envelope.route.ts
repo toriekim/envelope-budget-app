@@ -6,6 +6,8 @@ import {
   updateEnvelope,
   deleteEnvelope,
   transferEnvelopeBalance,
+  getEnvelopeTransactions,
+  addEnvelopeTransaction,
 } from '../controllers/envelope.controller';
 
 const router: Router = express.Router();
@@ -19,6 +21,10 @@ router.post('/', createEnvelope);
 router.patch('/:id', updateEnvelope);
 
 router.delete('/:id', deleteEnvelope);
+
+router.get('/:id/transactions', getEnvelopeTransactions);
+
+router.post('/:id/transactions', addEnvelopeTransaction);
 
 router.post('/:fromId/transfer/:toId', transferEnvelopeBalance);
 
